@@ -237,6 +237,7 @@
       }
     {% endstyle %}
 
+    {{ 'typography.css' | asset_url | stylesheet_tag }}
     {{ 'base.css' | asset_url | stylesheet_tag }}
 
     {%- unless settings.type_body_font.system? -%}
@@ -254,6 +255,19 @@
         onload="this.media='all'"
       >
     {%- endif -%}
+
+    {{ '/assets/AmaticSC.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Cinzel.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/DancingScript.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/IndieFlower.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/LilitaOne.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Lobster.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Mukta.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Orbitron.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Pacifico.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/PermanentMarker.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/PressStart2P.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ '/assets/Righteous.ttf' | asset_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
 
     <script>
       document.documentElement.className = document.documentElement.className.replace('no-js', 'js');

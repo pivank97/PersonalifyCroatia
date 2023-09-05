@@ -2107,6 +2107,10 @@ product-info .loading-overlay:not(.hidden) ~ *,
   line-height: calc(1 + 0.1 / var(--font-body-scale));
 }
 
+.cart-count-bubble > * {
+  display: none !important;
+}
+
 /* utility-bar */
 .utility-bar {
   height: 100%;

@@ -1,0 +1,453 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.monogram-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 20px 20px 20px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards;
+}
+
+.monogram-modal[hidden] {
+    display: none;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.monogram-modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: column nowrap;
+    gap: 1rem;
+    margin: 0;
+    width: 100%;
+    max-width: 60rem;
+    border-radius: 10px;
+    height: auto;
+    max-height: 80vh;
+    padding: 1.25rem;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #FFFFFF;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: none;
+}
+
+.monogram-modal-content::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.monogram-modal-content::-webkit-scrollbar
+{
+    border-radius: 10px;
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+.monogram-modal-content::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+@keyframes slideDownIn {
+    from {
+        top: -100%;
+    }
+    to {
+        top: 50%;
+    }
+}
+
+@keyframes slideDownOut {
+    from {
+        top: 50%;
+        opacity: 1;
+    }
+    to {
+        top: -100%;
+        opacity: 0;
+    }
+}
+
+.show {
+    animation: slideDownIn 1.5s ease forwards;
+}
+
+.hide {
+    animation: slideDownOut 1.5s ease forwards;
+}
+
+h2 {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.monogram-modal-subtitle {
+    padding-top: 1rem;
+    font-size: 2rem;
+}
+
+.monogram-modal-exit {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    padding: 3px 5px;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: block;
+}
+
+.button--secondary {
+    margin-bottom: 1rem;
+}
+
+.monogram-modal-colors {
+    display: flex;
+    flex-flow: column nowrap;
+    left: 200px;
+}
+
+.monogram-modal-fonts {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.monogram-modal-locations {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+/*
+RADIOBUTTONS 1
+*/
+
+.monogram-color input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+}
+
+.monogram-color span {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.monogram-color span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: border-color 0.5s, background-color 0.5s;
+}
+
+.monogram-color input[type="radio"]:checked+span::before {
+    border-color: #0096FF;
+    background-color: #0096FF;
+}
+
+.monogram-color span::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.monogram-color input[type="radio"]:checked+span::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/*
+RADIOBUTTONS 2
+*/
+
+.monogram-font input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+}
+
+.monogram-font span {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.monogram-font span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: border-color 0.5s, background-color 0.5s;
+}
+
+.monogram-font input[type="radio"]:checked+span::before {
+    border-color: #0096FF;
+    background-color: #0096FF;
+}
+
+.monogram-font span::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.monogram-font input[type="radio"]:checked+span::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/*
+RADIOBUTTONS 3
+*/
+
+.monogram-location input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+}
+
+.monogram-location span {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.monogram-location span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: border-color 0.5s, background-color 0.5s;
+}
+
+.monogram-location input[type="radio"]:checked+span::before {
+    border-color: #0096FF;
+    background-color: #0096FF;
+}
+
+.monogram-location span::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.monogram-location input[type="radio"]:checked+span::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/*
+CHECKBOX
+
+
+.monogram-location input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+}
+
+.monogram-location span {
+    position: relative;
+    padding-left: 3rem;
+    cursor: pointer;
+}
+
+.monogram-location span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    background-color: transparent;
+    transition: border-color 0.5s, background-color 0.5s;
+}
+
+.monogram-location input[type="checkbox"]:checked+span::before {
+    border-color: #0096FF;
+    background-color: #0096FF;
+}
+
+.monogram-location span::after {
+    content: "\2713";
+    position: absolute;
+    left: 5px;
+    top: -2px;
+    font-size: 14px;
+    color: white;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.monogram-location input[type="checkbox"]:checked+span::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+*/
+
+.monogram-preview {
+    font-size: 5rem;
+    background: #ccc;
+    padding: 1rem 4rem;
+}
+
+.monogram-preview-container {
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+}
+
+.monogram-modal-input {
+    border: 2px solid #ccc;
+    padding: 0.75rem;
+    width: 100%;
+    max-width: 20rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+.monogram-modal-input:focus {
+    border-color: #0096FF;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.monogram-preview[data-font="Lobster"] {
+    font-family: "Lobster";
+}
+
+.monogram-preview[data-font="Helvetica"] {
+    font-family: Helvetica;
+}
+
+.monogram-preview[data-font="Times New Roman"] {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.monogram-preview[data-font="Mukta"] {
+    font-family: "Mukta";
+}
+
+.monogram-preview[data-font="Dancing Script"] {
+    font-family: "DancingScript";
+}
+
+.monogram-preview[data-font="Pacifico"] {
+    font-family: "Pacifico";
+}
+
+.monogram-preview[data-font="Pacifico"] {
+    font-family: "Pacifico";
+}
+
+.monogram-preview[data-font="Indie Flower"] {
+    font-family: "IndieFlower";
+}
+
+.monogram-preview[data-font="Lilita One"] {
+    font-family: "LilitaOne";
+}
+
+.monogram-preview[data-font="Permanent Marker"] {
+    font-family: "PermanentMarker";
+}
+
+.monogram-preview[data-font="Amatic SC"] {
+    font-family: "AmaticSC";
+}
+
+.monogram-preview[data-font="Orbitron"] {
+    font-family: "Orbitron";
+}
+
+.monogram-preview[data-font="Cinzel"] {
+    font-family: "Cinzel";
+}
+
+.monogram-preview[data-font="Righteous"] {
+    font-family: "Righteous";
+}
+
+.monogram-preview[data-font="Press Start 2P"] {
+    font-family: "PressStart2P";
+}

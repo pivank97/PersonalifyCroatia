@@ -1,0 +1,48 @@
+{{ 'component-custom-image-with-text.css' | asset_url | stylesheet_tag }}
+
+<div class="custom-image-with-text__wrapper">
+    <div class="custom-image-with-text__image">
+      {{ section.settings.image | image_url: width: 1200, height: 1200 | image_tag }}
+    </div>
+    <div class="custom-image-with-text__text">
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.text }}</p>
+        <a href="{{ section.settings.button_link }}" class="btn">{{ section.settings.button_text }}</a>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Custom Image with Text",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "text",
+        "label": "Text"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }
+    ],
+    "presets": [{
+        "name": "Custom Image with Text"
+    }]
+}    
+{% endschema %}

@@ -1455,5 +1455,21 @@
         "info": "t:settings_schema.cart.settings.cart_drawer.collection.info"
       }
     ]
+  },
+  {
+    "name": "Monograming",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_monograming",
+        "label": "Enable Monograming",
+        "default": true
+      }, {
+        "type": "product",
+        "id": "monograming_product",
+        "label": "Monograming Product",
+        "info": "Monograming Product"
+      }
+    ]
   }
 ]

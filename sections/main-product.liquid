@@ -310,6 +310,28 @@
             {%- when 'variant_picker' -%}
               {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
             {%- when 'buy_buttons' -%}
+              {%- unless settings.monograming_product == blank and settings.enable_monograming == false -%}
+                {%- if product.tags contains 'monograming' -%}
+                  {{ 'monogram-modal.css' | asset_url | stylesheet_tag }}
+                  <button
+                    id="MonogramModal-Trigger-{{ section.id }}"
+                    type="button"
+                    class="product-form__submit button button--full-width button--secondary"
+                    {% if product.selected_or_first_available_variant.available == false %}
+                      disabled
+                    {% endif %}
+                  >
+                    <span>
+                      {%- if product.selected_or_first_available_variant.available == false -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- else -%}
+                        {{ 'products.product.add_monogram' | t }} (+{{ settings.monograming_product.price | money }})
+                      {%- endif -%}
+                    </span>
+                  </button>
+                  <script src="{{ 'monogram-modal.js' | asset_url }}" defer></script>
+                {%- endif -%}
+              {%- endunless -%}
               {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
             {%- when 'rating' -%}
               {%- if product.metafields.reviews.rating.value != blank -%}
@@ -447,6 +469,59 @@
       </div>
     {%- endif -%}
   </div>
+
+  {%- unless settings.monograming_product == blank and settings.enable_monograming == false -%}
+    {%- if product.tags contains 'monograming' -%}
+      <monogram-modal 
+        class="monogram-modal" 
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}" 
+        data-monogram-variant-id="{{ settings.monograming_product.first_available_variant.id }}" 
+        hidden 
+      >
+        <button class="monogram-modal-exit">&#10006;</button>
+        <div class="monogram-modal-content">
+          <h2>Add your monogram</h2>
+          <div class="monogram-preview-container" hidden>
+            <p class="monogram-preview" id="MonogramModal-Preview-{{ section.id }}"></p>
+          </div>
+          <label class="monogram-modal-subtitle" for="MonogramModal-Input-Text-{{ section.id }}">Monogram text</label>
+          <input class="monogram-modal-input" type="text" name="Monogram text" id="MonogramModal-Input-Text-{{ section.id }}" maxlength="3" placeholder="Enter your monogram text">
+          <p class="monogram-modal-subtitle">Monogram color</p>
+          <div class="monogram-modal-colors">
+          {%- for item in product.metafields.custom.monogram_colors.value -%}
+            <label for="MonogramModal-Input-Color-{{ section.id }}-{{ forloop.index0 }}" class="monogram-color">
+              <input type="radio" name="Monogram color" data-name-value="{{ item.name.value }}" value="{{ item.color.value }}" id="MonogramModal-Input-Color-{{ section.id }}-{{ forloop.index0 }}" {% if forloop.index0 == 0 %}checked{% endif %}>
+              <span>{{ item.name.value }}</span>
+            </label>
+          {%- endfor -%}
+          </div>
+          <p class="monogram-modal-subtitle">Monogram font</p>
+          <div class="monogram-modal-fonts">
+          {%- for item in product.metafields.custom.monogram_fonts.value -%}
+            <label for="MonogramModal-Input-Font-{{ section.id }}-{{ forloop.index0 }}" class="monogram-font">
+              <input type="radio" name="Monogram font" value="{{ item }}" id="MonogramModal-Input-Font-{{ section.id }}-{{ forloop.index0 }}" {% if forloop.index0 == 0 %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+          {%- endfor -%}
+          </div>
+          <p class="monogram-modal-subtitle">Monogram location</p>
+          <div class="monogram-modal-locations">
+          {%- for item in product.metafields.custom.monogram_location.value -%}
+            <label for="MonogramModal-Input-Location-{{ section.id }}-{{ forloop.index0 }}" class="monogram-location">
+              <input type="radio" name="Monogram location" value="{{ item }}" id="MonogramModal-Input-Location-{{ section.id }}-{{ forloop.index0 }}" {% if forloop.index0 == 0 %}checked{% endif %}>
+              <span>{{ item }}</span>
+            </label>
+          {%- endfor -%}
+          </div>
+          <div>
+            <button type="button" class="button button--secondary" id="MonogramModal-Button-Submit-{{ section.id }}">
+              {{ 'products.product.add_to_cart' | t }}
+            </button>
+          </div>
+        </div>
+      </monogram-modal>
+    {%- endif -%}
+  {%- endunless -%}
 
   {% render 'product-media-modal' variant_images: variant_images %}
 

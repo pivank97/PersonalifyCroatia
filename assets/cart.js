@@ -5,7 +5,12 @@ class CartRemoveButton extends HTMLElement {
     this.addEventListener('click', (event) => {
       event.preventDefault();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
-      cartItems.updateQuantity(this.dataset.index, 0);
+
+      if (this.dataset.monogramItemKey && this.dataset.itemKey) {
+        cartItems.updateQuantityOfProductWithMonogram(this.dataset.index, this.dataset.itemKey, this.dataset.monogramItemKey, 0);
+      } else {
+        cartItems.updateQuantity(this.dataset.index, 0);
+      }
     });
   }
 }
@@ -43,7 +48,12 @@ class CartItems extends HTMLElement {
   }
 
   onChange(event) {
-    this.updateQuantity(event.target.dataset.index, event.target.value, document.activeElement.getAttribute('name'));
+  
+    if (event.target.dataset.monogramItemKey && event.target.dataset.itemKey) {
+      this.updateQuantityOfProductWithMonogram(event.target.dataset.index, event.target.dataset.itemKey, event.target.dataset.monogramItemKey, event.target.value, document.activeElement.getAttribute('name'));
+    } else {
+      this.updateQuantity(event.target.dataset.index, event.target.value, document.activeElement.getAttribute('name'));
+    }
   }
 
   onCartUpdate() {
@@ -95,6 +105,83 @@ class CartItems extends HTMLElement {
     });
 
     fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } })
+      .then((response) => {
+        return response.text();
+      })
+      .then((state) => {
+        const parsedState = JSON.parse(state);
+        const quantityElement =
+          document.getElementById(`Quantity-${line}`) || document.getElementById(`Drawer-quantity-${line}`);
+        const items = document.querySelectorAll('.cart-item');
+
+        if (parsedState.errors) {
+          quantityElement.value = quantityElement.getAttribute('value');
+          this.updateLiveRegions(line, parsedState.errors);
+          return;
+        }
+
+        this.classList.toggle('is-empty', parsedState.item_count === 0);
+        const cartDrawerWrapper = document.querySelector('cart-drawer');
+        const cartFooter = document.getElementById('main-cart-footer');
+
+        if (cartFooter) cartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
+        if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
+
+        this.getSectionsToRender().forEach((section) => {
+          const elementToReplace =
+            document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+          elementToReplace.innerHTML = this.getSectionInnerHTML(
+            parsedState.sections[section.section],
+            section.selector
+          );
+        });
+        const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
+        let message = '';
+        if (items.length === parsedState.items.length && updatedValue !== parseInt(quantityElement.value)) {
+          if (typeof updatedValue === 'undefined') {
+            message = window.cartStrings.error;
+          } else {
+            message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
+          }
+        }
+        this.updateLiveRegions(line, message);
+
+        const lineItem =
+          document.getElementById(`CartItem-${line}`) || document.getElementById(`CartDrawer-Item-${line}`);
+        if (lineItem && lineItem.querySelector(`[name="${name}"]`)) {
+          cartDrawerWrapper
+            ? trapFocus(cartDrawerWrapper, lineItem.querySelector(`[name="${name}"]`))
+            : lineItem.querySelector(`[name="${name}"]`).focus();
+        } else if (parsedState.item_count === 0 && cartDrawerWrapper) {
+          trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('a'));
+        } else if (document.querySelector('.cart-item') && cartDrawerWrapper) {
+          trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
+        }
+        publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items' });
+      })
+      .catch(() => {
+        this.querySelectorAll('.loading-overlay').forEach((overlay) => overlay.classList.add('hidden'));
+        const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
+        errors.textContent = window.cartStrings.error;
+      })
+      .finally(() => {
+        this.disableLoading(line);
+      });
+  }
+
+  updateQuantityOfProductWithMonogram(line, itemKey, monogramItemKey, quantity, name) {
+    this.enableLoading(line);
+
+    const body = JSON.stringify({
+      updates: {
+        [itemKey]: quantity,
+        [monogramItemKey]: quantity,
+      },
+      sections: this.getSectionsToRender().map((section) => section.section),
+      sections_url: window.location.pathname,
+    });
+
+    fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } })
       .then((response) => {
         return response.text();
       })
